@@ -51,6 +51,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NODE_ENV=production
+            NODE_OPTIONS=--max-old-space-size=4096
 
       - name: Export image to tar (optional artifact)
         run: |
