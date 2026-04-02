@@ -6,6 +6,8 @@ export const models = [
   { id: "qwen-plus", label: "Qwen Plus" },
   { id: "qwen-turbo", label: "Qwen Turbo" },
   { id: "qwen-long", label: "Qwen Long" },
+  { id: "qwen3.5-plus", label: "Qwen 3.5 Plus" },
+  { id: "qwen3-max", label: "Qwen 3 Max" },
   { id: "qwen-vl-max", label: "Qwen VL Max (多模态)" },
   { id: "qwen-vl-plus", label: "Qwen VL Plus (多模态)" },
   { id: "qwen-coder-plus", label: "Qwen Coder Plus (代码)" },
