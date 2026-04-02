@@ -1,4 +1,5 @@
 export { execute } from "./execute.js";
+export { testEnvironment } from "./test.js";
 import type { AdapterSessionCodec } from "@paperclipai/adapter-utils";
 
 function readNonEmptyString(value: unknown): string | null {
