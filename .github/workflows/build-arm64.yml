@@ -46,6 +46,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest-arm64
+            ghcr.io/${{ github.repository }}:arm64
             ghcr.io/${{ github.repository }}:${{ github.sha }}-arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
