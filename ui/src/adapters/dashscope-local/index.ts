@@ -15,9 +15,6 @@ function buildDashScopeLocalConfig(values: CreateConfigValues) {
   if (values.extraArgs !== undefined) {
     result.extraArgs = values.extraArgs;
   }
-  if (values.env !== undefined) {
-    result.env = values.env;
-  }
   if (values.instructionsFilePath !== undefined) {
     result.instructionsFilePath = values.instructionsFilePath;
   }
