@@ -46,7 +46,7 @@ Operational fields:
 
 Notes:
 - Requires DASHSCOPE_API_KEY environment variable
-- API endpoint: https://coding.dashscope.aliyuncs.com/v1
+- API endpoint: https://dashscope.aliyuncs.com/compatible-mode/v1
 - Models support: text generation, vision, code, math
 - Billing: pay-per-token via Alibaba Cloud account
 `;
