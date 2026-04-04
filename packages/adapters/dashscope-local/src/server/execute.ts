@@ -15,16 +15,26 @@ interface DashScopeMessage {
   content: string;
 }
 
-interface DashScopeResponse {
-  output: {
-    text: string;
-    finish_reason?: string;
-  };
+// OpenAI 兼容响应格式
+interface OpenAIResponse {
+  id: string;
+  object: string;
+  created: number;
+  model: string;
+  choices: Array<{
+    index: number;
+    message: {
+      role: string;
+      content: string;
+      reasoning_content?: string;
+    };
+    finish_reason: string;
+  }>;
   usage: {
-    input_tokens: number;
-    output_tokens: number;
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
   };
-  request_id: string;
 }
 
 async function callDashScopeAPI(
@@ -37,8 +47,8 @@ async function callDashScopeAPI(
     maxTokens?: number;
     timeoutSec?: number;
   },
-): Promise<{ response: DashScopeResponse; latencyMs: number }> {
-  // 百炼通用 API 端点
+): Promise<{ response: OpenAIResponse; latencyMs: number }> {
+  // 百炼 Coding Plan 端点（OpenAI 兼容）
   const url = new URL("https://coding.dashscope.aliyuncs.com/v1/chat/completions");
   
   const requestBody = {
@@ -71,7 +81,7 @@ async function callDashScopeAPI(
           return;
         }
         try {
-          const response: DashScopeResponse = JSON.parse(responseData);
+          const response: OpenAIResponse = JSON.parse(responseData);
           resolve({ response, latencyMs });
         } catch (e) {
           reject(new Error(`Failed to parse DashScope response: ${e}\n${responseData}`));
@@ -171,7 +181,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       exitCode: 1,
       signal: null,
       timedOut: false,
-      errorMessage: "Model not specified. Set config.model to a valid DashScope model (e.g., qwen-max, qwen-plus).",
+      errorMessage: "Model not specified. Set config.model to a valid DashScope model (e.g., qwen3.5-plus, qwen-coder-plus).",
       errorCode: "invalid_config",
     };
   }
@@ -192,10 +202,11 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     });
 
     await onLog("stdout", `[paperclip] DashScope response in ${latencyMs}ms\n`);
-    await onLog("stdout", `[paperclip] Tokens: input=${response.usage.input_tokens}, output=${response.usage.output_tokens}\n`);
+    await onLog("stdout", `[paperclip] Tokens: prompt=${response.usage.prompt_tokens}, completion=${response.usage.completion_tokens}\n`);
 
-    const outputText = response.output.text ?? "";
-    const finishReason = response.output.finish_reason ?? "stop";
+    // OpenAI 兼容响应格式解析
+    const outputText = response.choices[0]?.message?.content ?? "";
+    const finishReason = response.choices[0]?.finish_reason ?? "stop";
 
     return {
       exitCode: 0,
@@ -204,9 +215,9 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       errorMessage: null,
       errorCode: null,
       usage: {
-        inputTokens: response.usage.input_tokens,
+        inputTokens: response.usage.prompt_tokens,
         cachedInputTokens: 0,
-        outputTokens: response.usage.output_tokens,
+        outputTokens: response.usage.completion_tokens,
       },
       sessionId: null,
       sessionParams: null,
@@ -217,9 +228,9 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       billingType: "api",
       costUsd: 0,
       resultJson: {
-        output: response.output,
+        choices: response.choices,
         usage: response.usage,
-        request_id: response.request_id,
+        id: response.id,
         latency_ms: latencyMs,
       },
       summary: outputText,
