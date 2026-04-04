@@ -16,23 +16,15 @@ interface DashScopeMessage {
 }
 
 interface DashScopeResponse {
-  id: string;
-  object: string;
-  created: number;
-  model: string;
-  choices: Array<{
-    index: number;
-    message: {
-      role: string;
-      content: string;
-    };
-    finish_reason: string;
-  }>;
-  usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
+  output: {
+    text: string;
+    finish_reason?: string;
   };
+  usage: {
+    input_tokens: number;
+    output_tokens: number;
+  };
+  request_id: string;
 }
 
 async function callDashScopeAPI(
@@ -46,7 +38,8 @@ async function callDashScopeAPI(
     timeoutSec?: number;
   },
 ): Promise<{ response: DashScopeResponse; latencyMs: number }> {
-  const url = new URL("https://coding.dashscope.aliyuncs.com/v1/chat/completions");
+  // 百炼通用 API 端点
+  const url = new URL("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions");
   
   const requestBody = {
     model,
@@ -199,10 +192,10 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     });
 
     await onLog("stdout", `[paperclip] DashScope response in ${latencyMs}ms\n`);
-    await onLog("stdout", `[paperclip] Tokens: prompt=${response.usage.prompt_tokens}, completion=${response.usage.completion_tokens}\n`);
+    await onLog("stdout", `[paperclip] Tokens: input=${response.usage.input_tokens}, output=${response.usage.output_tokens}\n`);
 
-    const outputText = response.choices[0]?.message?.content ?? "";
-    const finishReason = response.choices[0]?.finish_reason ?? "stop";
+    const outputText = response.output.text ?? "";
+    const finishReason = response.output.finish_reason ?? "stop";
 
     return {
       exitCode: 0,
@@ -211,9 +204,9 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       errorMessage: null,
       errorCode: null,
       usage: {
-        inputTokens: response.usage.prompt_tokens,
+        inputTokens: response.usage.input_tokens,
         cachedInputTokens: 0,
-        outputTokens: response.usage.completion_tokens,
+        outputTokens: response.usage.output_tokens,
       },
       sessionId: null,
       sessionParams: null,
@@ -224,9 +217,9 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
       billingType: "api",
       costUsd: 0,
       resultJson: {
-        choices: response.choices,
+        output: response.output,
         usage: response.usage,
-        id: response.id,
+        request_id: response.request_id,
         latency_ms: latencyMs,
       },
       summary: outputText,
