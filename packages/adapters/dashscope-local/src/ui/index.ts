@@ -47,11 +47,6 @@ export const configFields = [
     default: 2048
   },
   {
-    key: "env",
-    label: "Environment Variables",
-    type: "env",
-  },
-  {
     key: "timeoutSec",
     label: "Timeout (sec)",
     type: "number",
@@ -64,6 +59,17 @@ export const configFields = [
     type: "number",
     min: 0,
     default: 15,
+  },
+  {
+    key: "dangerouslySkipPermissions",
+    label: "Dangerously Skip Permissions",
+    type: "boolean",
+    default: false,
+  },
+  {
+    key: "env",
+    label: "Environment Variables",
+    type: "env",
   },
 ];
 
