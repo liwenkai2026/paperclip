@@ -49,11 +49,6 @@ export function buildDashScopeLocalConfig(v: CreateConfigValues): Record<string,
   if (v.instructionsFilePath) ac.instructionsFilePath = v.instructionsFilePath;
   if (v.promptTemplate) ac.promptTemplate = v.promptTemplate;
   if (v.model) ac.model = v.model;
-  if (v.baseUrl) ac.baseUrl = v.baseUrl;
-  if (v.temperature !== undefined) ac.temperature = v.temperature;
-  if (v.topP !== undefined) ac.topP = v.topP;
-  if (v.maxTokens !== undefined) ac.maxTokens = v.maxTokens;
-  if (v.timeoutSec !== undefined) ac.timeoutSec = v.timeoutSec;
   
   // Handle environment variables
   const env = parseEnvBindings(v.envBindings);
