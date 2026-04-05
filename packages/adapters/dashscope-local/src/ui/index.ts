@@ -21,11 +21,6 @@ export const configFields = [
     placeholder: "Leave empty for standard endpoint",
     help: "Leave empty to use standard DashScope endpoint"
   },
-  {
-    key: "env",
-    label: "Environment Variables",
-    type: "env",
-  },
   { 
     key: "temperature", 
     label: "Temperature", 
@@ -50,6 +45,25 @@ export const configFields = [
     type: "number", 
     min: 1,
     default: 2048
+  },
+  {
+    key: "env",
+    label: "Environment Variables",
+    type: "env",
+  },
+  {
+    key: "timeoutSec",
+    label: "Timeout (sec)",
+    type: "number",
+    min: 0,
+    default: 0,
+  },
+  {
+    key: "graceSec",
+    label: "Interrupt grace period (sec)",
+    type: "number",
+    min: 0,
+    default: 15,
   },
 ];
 

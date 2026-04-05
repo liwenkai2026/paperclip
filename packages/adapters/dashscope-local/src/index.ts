@@ -28,52 +28,22 @@ export const agentConfigurationDoc = `# dashscope_local agent configuration
 
 Adapter: dashscope_local
 
-Use when:
-- You want Paperclip to use Alibaba Cloud DashScope (百炼) models
-- You have a DASHSCOPE_API_KEY configured
-- You need Chinese-optimized LLM capabilities
-
-Don't use when:
-- You don't have DashScope API access
-- You need local/offline inference
-
-## Configuration Example
-
-\`\`\`json
-{
-  "adapter": "dashscope_local",
-  "config": {
-    "model": "qwen3.5-plus",
-    "env": {
-      "DASHSCOPE_API_KEY": "sk-xxx"
-    }
-  }
-}
-\`\`\`
-
-## Core fields:
+Core fields:
 - cwd (string, optional): default absolute working directory fallback for the agent process
 - instructionsFilePath (string, optional): absolute path to a markdown instructions file
-- **model (string, required)**: DashScope model id (e.g., "qwen-max", "qwen-plus", "qwen-turbo", "qwen3.5-plus")
-- **baseUrl (string, optional)**: Custom API endpoint (leave empty for standard endpoint)
+- model (string, optional): DashScope model id
+- promptTemplate (string, optional): run prompt template
+- baseUrl (string, optional): custom API endpoint (leave empty for standard endpoint)
 - temperature (number, optional): sampling temperature (0.0-2.0, default 0.7)
 - topP (number, optional): nucleus sampling threshold (0.0-1.0, default 0.8)
 - maxTokens (number, optional): max completion tokens
-- timeoutSec (number, optional): request timeout in seconds
-- extraArgs (string[], optional): additional CLI args
 - env (object, optional): KEY=VALUE environment variables
 
-## Operational fields:
+Operational fields:
 - timeoutSec (number, optional): run timeout in seconds
 - graceSec (number, optional): SIGTERM grace period in seconds
 
-## Environment Variables:
-- **DASHSCOPE_API_KEY**: Required. API key for authentication (e.g., \`sk-xxxxxxxxx\`)
-
-## Notes:
-- Requires DASHSCOPE_API_KEY environment variable
-- **API endpoint**: https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
-- **Models support**: text generation, vision, code, math
-- **Billing**: pay-per-token via Alibaba Cloud account
-- Leave baseUrl empty to use standard endpoint
+Notes:
+- DASHSCOPE_API_KEY should be set in env
+- API endpoint: https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
 `;
