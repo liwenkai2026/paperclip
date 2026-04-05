@@ -5,13 +5,23 @@ import { DashScopeLocalConfigFields } from "./config-fields";
 function buildDashScopeLocalConfig(values: CreateConfigValues): Record<string, unknown> {
   const ac: Record<string, unknown> = {};
   if (values.model) ac.model = values.model;
-  if (values.baseUrl) ac.baseUrl = values.baseUrl;
-  if (values.temperature !== undefined) ac.temperature = values.temperature;
-  if (values.topP !== undefined) ac.topP = values.topP;
-  if (values.maxTokens !== undefined) ac.maxTokens = values.maxTokens;
-  if (values.timeoutSec !== undefined) ac.timeoutSec = values.timeoutSec;
-  if (values.graceSec !== undefined) ac.graceSec = values.graceSec;
-  if (values.env && Object.keys(values.env).length > 0) ac.env = values.env;
+  if (values.envVars) {
+    // Parse envVars string into object
+    const env: Record<string, string> = {};
+    values.envVars.split(/\r?\n/).forEach((line: string) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return;
+      const eq = trimmed.indexOf("=");
+      if (eq > 0) {
+        const key = trimmed.slice(0, eq).trim();
+        const value = trimmed.slice(eq + 1);
+        if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) {
+          env[key] = value;
+        }
+      }
+    });
+    if (Object.keys(env).length > 0) ac.env = env;
+  }
   return ac;
 }
 
