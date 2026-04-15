@@ -3,6 +3,7 @@ import {
   Field,
   DraftInput,
 } from "../../components/agent-config-primitives";
+import { cn } from "@/lib/utils";
 
 const inputClass =
   "w-full rounded-md border border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40";
@@ -70,19 +71,19 @@ export function DashScopeLocalConfigFields({
 
       <Field 
         label="API Base URL" 
-        hint="DashScope Coding Plan endpoint (fixed)"
-        readOnly={isCreate}
+        hint="DashScope Coding Plan endpoint (fixed to subscription API)"
       >
         <DraftInput
           value={effectiveBaseUrl}
           onCommit={(v: string) =>
             isCreate
-              ? null // baseUrl is fixed in create mode
+              ? null // baseUrl is fixed in create mode, set in buildAdapterConfig
               : mark("adapterConfig", "baseUrl", v || undefined)
           }
           immediate
-          className={inputClass}
+          className={cn(inputClass, isCreate && "bg-muted/50 cursor-not-allowed")}
           placeholder="https://coding.dashscope.aliyuncs.com/v1"
+          disabled={isCreate}
         />
       </Field>
 
