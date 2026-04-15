@@ -51,8 +51,10 @@ export function buildDashScopeLocalConfig(v: CreateConfigValues): Record<string,
   if (v.model) ac.model = v.model;
   
   // Default baseUrl to Coding Plan endpoint
+  // Note: baseUrl is stored in adapterConfig, not directly in CreateConfigValues
+  // The UI configFields defines it, and it's passed through the adapter config flow
   const defaultBaseUrl = "https://coding.dashscope.aliyuncs.com/v1";
-  ac.baseUrl = v.baseUrl || defaultBaseUrl;
+  ac.baseUrl = defaultBaseUrl;
   
   // Handle environment variables
   const env = parseEnvBindings(v.envBindings);
