@@ -38,8 +38,9 @@ Request behavior fields:
 - paperclipApiUrl (string, optional): absolute Paperclip base URL advertised in wake text
 
 Session routing fields:
-- sessionKeyStrategy (string, optional): issue (default), fixed, or run
+- sessionKeyStrategy (string, optional): issue (default), fixed, run, or openclaw
 - sessionKey (string, optional): fixed session key when strategy=fixed (default paperclip)
+- agentId (string, optional): agent ID for session key generation when strategy=openclaw (default: from wake payload)
 
 Standard outbound payload additions:
 - paperclip (object): standardized Paperclip context added to every gateway agent request

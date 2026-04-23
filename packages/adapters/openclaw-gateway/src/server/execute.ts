@@ -7,7 +7,7 @@ import { asNumber, asString, buildPaperclipEnv, parseObject } from "@paperclipai
 import crypto, { randomUUID } from "node:crypto";
 import { WebSocket } from "ws";
 
-type SessionKeyStrategy = "fixed" | "issue" | "run";
+type SessionKeyStrategy = "fixed" | "issue" | "run" | "openclaw";
 
 type WakePayload = {
   runId: string;
@@ -122,7 +122,7 @@ function parseBoolean(value: unknown, fallback = false): boolean {
 
 function normalizeSessionKeyStrategy(value: unknown): SessionKeyStrategy {
   const normalized = asString(value, "issue").trim().toLowerCase();
-  if (normalized === "fixed" || normalized === "run") return normalized;
+  if (normalized === "fixed" || normalized === "run" || normalized === "openclaw") return normalized;
   return "issue";
 }
 
@@ -131,10 +131,12 @@ function resolveSessionKey(input: {
   configuredSessionKey: string | null;
   runId: string;
   issueId: string | null;
+  agentId: string;
 }): string {
   const fallback = input.configuredSessionKey ?? "paperclip";
   if (input.strategy === "run") return `paperclip:run:${input.runId}`;
   if (input.strategy === "issue" && input.issueId) return `paperclip:issue:${input.issueId}`;
+  if (input.strategy === "openclaw") return `agent:${input.agentId}:main`;
   return fallback;
 }
 
@@ -1062,6 +1064,7 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
     configuredSessionKey,
     runId: ctx.runId,
     issueId: wakePayload.issueId,
+    agentId: wakePayload.agentId,
   });
 
   const templateMessage = nonEmpty(payloadTemplate.message) ?? nonEmpty(payloadTemplate.text);
