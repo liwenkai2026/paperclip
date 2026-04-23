@@ -38,7 +38,7 @@ Request behavior fields:
 - paperclipApiUrl (string, optional): absolute Paperclip base URL advertised in wake text
 
 Session routing fields:
-- sessionKeyStrategy (string, optional): issue (default), fixed, run, or openclaw
+- sessionKeyStrategy (string, optional): issue (default), fixed, or run
 - sessionKey (string, optional): fixed session key when strategy=fixed (default: {agentId}:paperclip)
 - agentId (string, optional): agent ID for session key generation (from wake payload or config)
 
@@ -46,7 +46,6 @@ Session key formats by strategy (OpenClaw compatible):
 - fixed: `{agentId}:paperclip` (or configured value)
 - issue: `{agentId}:paperclip:issue:{issueId}`
 - run: `{agentId}:paperclip:run:{runId}`
-- openclaw: `{agentId}:main`
 
 Note: OpenClaw uses the first segment of sessionKey as the agent ID for routing.
 The sessionKey prefix must match the agentId parameter for successful routing.

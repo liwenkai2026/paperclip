@@ -7,7 +7,7 @@ import { asNumber, asString, buildPaperclipEnv, parseObject } from "@paperclipai
 import crypto, { randomUUID } from "node:crypto";
 import { WebSocket } from "ws";
 
-type SessionKeyStrategy = "fixed" | "issue" | "run" | "openclaw";
+type SessionKeyStrategy = "fixed" | "issue" | "run";
 
 type WakePayload = {
   runId: string;
@@ -122,7 +122,7 @@ function parseBoolean(value: unknown, fallback = false): boolean {
 
 function normalizeSessionKeyStrategy(value: unknown): SessionKeyStrategy {
   const normalized = asString(value, "issue").trim().toLowerCase();
-  if (normalized === "fixed" || normalized === "run" || normalized === "openclaw") return normalized;
+  if (normalized === "fixed" || normalized === "run") return normalized;
   return "issue";
 }
 
@@ -136,7 +136,6 @@ function resolveSessionKey(input: {
   const fallback = input.configuredSessionKey ?? `${input.agentId}:paperclip`;
   if (input.strategy === "run") return `${input.agentId}:paperclip:run:${input.runId}`;
   if (input.strategy === "issue" && input.issueId) return `${input.agentId}:paperclip:issue:${input.issueId}`;
-  if (input.strategy === "openclaw") return `${input.agentId}:main`;
   return fallback;
 }
 
