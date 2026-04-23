@@ -157,9 +157,9 @@ export function OpenClawGatewayConfigFields({
               className={inputClass}
             >
               <option value="fixed">Fixed</option>
-              <option value="issue">Per issue</option>
-              <option value="run">Per run</option>
-              <option value="openclaw">OpenClaw format (agent:{agentId}:main)</option>
+              <option value="issue">Per issue ({agentId}:paperclip:issue:{issueId})</option>
+              <option value="run">Per run ({agentId}:paperclip:run:{runId})</option>
+              <option value="openclaw">OpenClaw format ({agentId}:main)</option>
             </select>
           </Field>
 

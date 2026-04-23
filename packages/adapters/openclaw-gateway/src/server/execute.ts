@@ -133,10 +133,10 @@ function resolveSessionKey(input: {
   issueId: string | null;
   agentId: string;
 }): string {
-  const fallback = input.configuredSessionKey ?? "paperclip";
-  if (input.strategy === "run") return `paperclip:run:${input.runId}`;
-  if (input.strategy === "issue" && input.issueId) return `paperclip:issue:${input.issueId}`;
-  if (input.strategy === "openclaw") return `agent:${input.agentId}:main`;
+  const fallback = input.configuredSessionKey ?? `${input.agentId}:paperclip`;
+  if (input.strategy === "run") return `${input.agentId}:paperclip:run:${input.runId}`;
+  if (input.strategy === "issue" && input.issueId) return `${input.agentId}:paperclip:issue:${input.issueId}`;
+  if (input.strategy === "openclaw") return `${input.agentId}:main`;
   return fallback;
 }
 
